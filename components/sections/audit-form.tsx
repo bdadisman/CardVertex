@@ -13,11 +13,14 @@ import { cn } from '@/lib/utils'
 
 type Status = 'idle' | 'submitting' | 'success' | 'error'
 
+type FieldErrors = Partial<Record<'businessName' | 'phone', string>>
+
 const fieldClass =
-  'h-12 w-full rounded-lg border border-input bg-background/60 px-4 text-base text-foreground placeholder:text-muted-foreground/70 transition-colors duration-200 hover:border-foreground/30 focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/40 focus-visible:outline-none'
+  'h-12 w-full rounded-lg border border-input bg-background/60 px-4 text-base text-foreground placeholder:text-muted-foreground/70 transition-colors duration-200 hover:border-foreground/30 focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/40 focus-visible:outline-none aria-invalid:border-destructive'
 
 export function AuditForm() {
   const [status, setStatus] = useState<Status>('idle')
+  const [errors, setErrors] = useState<FieldErrors>({})
   const [interests, setInterests] = useState<string[]>([])
 
   useEffect(() => {
@@ -40,28 +43,50 @@ export function AuditForm() {
     e.preventDefault()
     const form = e.currentTarget
     const data = new FormData(form)
+
+    const businessName = String(data.get('businessName') ?? '').trim()
+    const phone = String(data.get('phone') ?? '').trim()
+
+    const nextErrors: FieldErrors = {}
+    if (!businessName) nextErrors.businessName = 'Please enter your business name.'
+    if (!phone) nextErrors.phone = 'Please enter a phone number.'
+    setErrors(nextErrors)
+    if (Object.keys(nextErrors).length > 0) {
+      const firstInvalid = form.querySelector<HTMLInputElement>(
+        nextErrors.businessName ? '#businessName' : '#phone',
+      )
+      firstInvalid?.focus()
+      return
+    }
+
+    const notes = String(data.get('notes') ?? '').trim()
+    const notesWithInterests =
+      interests.length > 0
+        ? [`Interested in: ${interests.join(', ')}`, notes].filter(Boolean).join('\n\n')
+        : notes
+
     setStatus('submitting')
     try {
-      const res = await fetch('/api/lead', {
+      const res = await fetch('/api/audit', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          businessName: data.get('businessName'),
-          name: data.get('name'),
-          email: data.get('email'),
-          businessType: data.get('businessType'),
-          interests,
-          notes: data.get('notes'),
+          businessName,
+          contactName: String(data.get('contactName') ?? '').trim(),
+          phone,
+          email: String(data.get('email') ?? '').trim(),
+          businessType: String(data.get('businessType') ?? '').trim(),
+          notes: notesWithInterests,
         }),
       })
-      if (!res.ok) throw new Error('Request failed')
+      if (!res.ok) throw new Error(`Request failed with ${res.status}`)
       setStatus('success')
-      form.reset()
-      setInterests([])
     } catch {
       setStatus('error')
     }
   }
+
+  const submitting = status === 'submitting'
 
   return (
     <Section id="audit" eyebrow="Free audit">
@@ -100,49 +125,90 @@ export function AuditForm() {
                 exit={{ opacity: 0, y: -12 }}
                 transition={{ duration: 0.3, ease: EASE }}
                 onSubmit={handleSubmit}
+                noValidate
+                aria-busy={submitting}
                 className="flex flex-col gap-6"
               >
-                <div className="grid gap-6 sm:grid-cols-2">
-                  <div className="flex flex-col gap-2">
-                    <label htmlFor="businessName" className="text-sm font-medium">
-                      Business name
-                    </label>
-                    <input
-                      id="businessName"
-                      name="businessName"
-                      required
-                      autoComplete="organization"
-                      className={fieldClass}
-                    />
+                <fieldset disabled={submitting} className="flex flex-col gap-6">
+                  <div className="grid gap-6 sm:grid-cols-2">
+                    <div className="flex flex-col gap-2">
+                      <label htmlFor="businessName" className="text-sm font-medium">
+                        Business name
+                      </label>
+                      <input
+                        id="businessName"
+                        name="businessName"
+                        required
+                        autoComplete="organization"
+                        aria-invalid={errors.businessName ? true : undefined}
+                        aria-describedby={
+                          errors.businessName ? 'businessName-error' : undefined
+                        }
+                        onChange={() =>
+                          errors.businessName &&
+                          setErrors((prev) => ({ ...prev, businessName: undefined }))
+                        }
+                        className={fieldClass}
+                      />
+                      {errors.businessName ? (
+                        <p id="businessName-error" className="text-sm text-destructive">
+                          {errors.businessName}
+                        </p>
+                      ) : null}
+                    </div>
+                    <div className="flex flex-col gap-2">
+                      <label htmlFor="phone" className="text-sm font-medium">
+                        Phone
+                      </label>
+                      <input
+                        id="phone"
+                        name="phone"
+                        type="tel"
+                        required
+                        autoComplete="tel"
+                        inputMode="tel"
+                        aria-invalid={errors.phone ? true : undefined}
+                        aria-describedby={errors.phone ? 'phone-error' : undefined}
+                        onChange={() =>
+                          errors.phone &&
+                          setErrors((prev) => ({ ...prev, phone: undefined }))
+                        }
+                        className={fieldClass}
+                      />
+                      {errors.phone ? (
+                        <p id="phone-error" className="text-sm text-destructive">
+                          {errors.phone}
+                        </p>
+                      ) : null}
+                    </div>
                   </div>
-                  <div className="flex flex-col gap-2">
-                    <label htmlFor="name" className="text-sm font-medium">
-                      Your name
-                    </label>
-                    <input
-                      id="name"
-                      name="name"
-                      required
-                      autoComplete="name"
-                      className={fieldClass}
-                    />
-                  </div>
-                </div>
 
-                <div className="grid gap-6 sm:grid-cols-2">
-                  <div className="flex flex-col gap-2">
-                    <label htmlFor="email" className="text-sm font-medium">
-                      Email
-                    </label>
-                    <input
-                      id="email"
-                      name="email"
-                      type="email"
-                      required
-                      autoComplete="email"
-                      className={fieldClass}
-                    />
+                  <div className="grid gap-6 sm:grid-cols-2">
+                    <div className="flex flex-col gap-2">
+                      <label htmlFor="contactName" className="text-sm font-medium">
+                        Your name
+                      </label>
+                      <input
+                        id="contactName"
+                        name="contactName"
+                        autoComplete="name"
+                        className={fieldClass}
+                      />
+                    </div>
+                    <div className="flex flex-col gap-2">
+                      <label htmlFor="email" className="text-sm font-medium">
+                        Email
+                      </label>
+                      <input
+                        id="email"
+                        name="email"
+                        type="email"
+                        autoComplete="email"
+                        className={fieldClass}
+                      />
+                    </div>
                   </div>
+
                   <div className="flex flex-col gap-2">
                     <label htmlFor="businessType" className="text-sm font-medium">
                       Business type
@@ -150,13 +216,10 @@ export function AuditForm() {
                     <select
                       id="businessType"
                       name="businessType"
-                      required
                       defaultValue=""
                       className={fieldClass}
                     >
-                      <option value="" disabled>
-                        Select one
-                      </option>
+                      <option value="">Select one</option>
                       {auditForm.businessTypes.map((t) => (
                         <option key={t} value={t}>
                           {t}
@@ -164,59 +227,69 @@ export function AuditForm() {
                       ))}
                     </select>
                   </div>
-                </div>
 
-                <fieldset className="flex flex-col gap-3">
-                  <legend className="mb-3 text-sm font-medium">I&apos;m interested in</legend>
-                  <div className="grid gap-2 sm:grid-cols-2">
-                    {auditForm.interests.map((interest) => {
-                      const checked = interests.includes(interest)
-                      return (
-                        <label
-                          key={interest}
-                          className={cn(
-                            'flex cursor-pointer items-center gap-3 rounded-lg border px-4 py-3 text-sm transition-[border-color,background-color,transform] duration-200 hover:scale-[1.01] has-focus-visible:ring-3 has-focus-visible:ring-ring/40',
-                            checked
-                              ? 'border-accent bg-accent/10 text-foreground'
-                              : 'border-input bg-background/40 text-foreground/90 hover:border-foreground/30',
-                          )}
-                        >
-                          <input
-                            type="checkbox"
-                            name="interests"
-                            value={interest}
-                            checked={checked}
-                            onChange={() => toggleInterest(interest)}
-                            className="size-4 shrink-0 accent-accent"
-                          />
-                          {interest}
-                        </label>
-                      )
-                    })}
+                  <fieldset className="flex flex-col gap-3">
+                    <legend className="mb-3 text-sm font-medium">I&apos;m interested in</legend>
+                    <div className="grid gap-2 sm:grid-cols-2">
+                      {auditForm.interests.map((interest) => {
+                        const checked = interests.includes(interest)
+                        return (
+                          <label
+                            key={interest}
+                            className={cn(
+                              'flex cursor-pointer items-center gap-3 rounded-lg border px-4 py-3 text-sm transition-[border-color,background-color,transform] duration-200 hover:scale-[1.01] has-focus-visible:ring-3 has-focus-visible:ring-ring/40',
+                              checked
+                                ? 'border-accent bg-accent/10 text-foreground'
+                                : 'border-input bg-background/40 text-foreground/90 hover:border-foreground/30',
+                            )}
+                          >
+                            <input
+                              type="checkbox"
+                              name="interests"
+                              value={interest}
+                              checked={checked}
+                              onChange={() => toggleInterest(interest)}
+                              className="size-4 shrink-0 accent-accent"
+                            />
+                            {interest}
+                          </label>
+                        )
+                      })}
+                    </div>
+                  </fieldset>
+
+                  <div className="flex flex-col gap-2">
+                    <label htmlFor="notes" className="text-sm font-medium">
+                      Anything else{' '}
+                      <span className="font-normal text-muted-foreground">(optional)</span>
+                    </label>
+                    <textarea
+                      id="notes"
+                      name="notes"
+                      rows={4}
+                      className={cn(fieldClass, 'h-auto py-3 leading-relaxed')}
+                    />
                   </div>
                 </fieldset>
-
-                <div className="flex flex-col gap-2">
-                  <label htmlFor="notes" className="text-sm font-medium">
-                    Anything else{' '}
-                    <span className="font-normal text-muted-foreground">(optional)</span>
-                  </label>
-                  <textarea
-                    id="notes"
-                    name="notes"
-                    rows={4}
-                    className={cn(fieldClass, 'h-auto py-3 leading-relaxed')}
-                  />
-                </div>
 
                 <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                   <Magnetic>
                     <button
                       type="submit"
-                      disabled={status === 'submitting'}
-                      className="btn-primary"
+                      disabled={submitting}
+                      className="btn-primary inline-flex items-center gap-2 disabled:cursor-wait disabled:opacity-80"
                     >
-                      {status === 'submitting' ? 'Sending…' : auditForm.submit}
+                      {submitting ? (
+                        <>
+                          <span
+                            aria-hidden="true"
+                            className="size-4 animate-spin rounded-full border-2 border-current border-t-transparent"
+                          />
+                          Sending…
+                        </>
+                      ) : (
+                        auditForm.submit
+                      )}
                     </button>
                   </Magnetic>
                   {status === 'error' ? (
