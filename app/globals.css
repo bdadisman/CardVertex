@@ -1,0 +1,143 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+@import 'shadcn/tailwind.css';
+
+@theme inline {
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-bricolage), var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-glow: var(--glow);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --color-foreground: var(--foreground);
+  --color-background: var(--background);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+}
+
+:root {
+  color-scheme: dark;
+  /* Ink navy #070C16 · Off-white #F2F4F7 · Slate #8B95A7 · Green #1E9E5A · Deep blue glow #1F4B8F */
+  --background: #070c16;
+  --foreground: #f2f4f7;
+  --card: #0c1322;
+  --card-foreground: #f2f4f7;
+  --popover: #0c1322;
+  --popover-foreground: #f2f4f7;
+  --primary: #f2f4f7;
+  --primary-foreground: #070c16;
+  --secondary: #111a2c;
+  --secondary-foreground: #f2f4f7;
+  --muted: #111a2c;
+  --muted-foreground: #8b95a7;
+  --accent: #1e9e5a;
+  --accent-foreground: #04120a;
+  --glow: #1f4b8f;
+  --destructive: #e5484d;
+  --border: #1a2334;
+  --input: #263149;
+  --ring: #1e9e5a;
+  --radius: 0.75rem;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html {
+    scroll-padding-top: 5rem;
+  }
+  /* Native smooth scrolling only when Lenis is not driving the page (reduced motion). */
+  @media (prefers-reduced-motion: no-preference) {
+    html:not(.lenis) {
+      scroll-behavior: smooth;
+    }
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+  ::selection {
+    background: color-mix(in oklab, var(--accent) 45%, transparent);
+  }
+  /* Custom cursor is active: hide the native one except in text fields. */
+  html.has-cursor,
+  html.has-cursor * {
+    cursor: none;
+  }
+  html.has-cursor :is(input, textarea, select) {
+    cursor: auto;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply inline-flex h-12 items-center justify-center rounded-full bg-accent px-7 text-base font-medium text-accent-foreground transition-transform duration-200 will-change-transform hover:scale-[1.04] focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none active:scale-[0.98] disabled:opacity-60 disabled:hover:scale-100;
+  }
+  .btn-ghost {
+    @apply inline-flex h-11 items-center justify-center rounded-full border border-input bg-transparent px-6 text-sm font-medium text-foreground transition-[transform,background-color,border-color] duration-200 will-change-transform hover:scale-[1.04] hover:border-foreground/40 hover:bg-foreground/5 focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none active:scale-[0.98];
+  }
+  /* Underline draws in from the left on hover using transform only. */
+  .link-underline {
+    @apply relative inline-block;
+  }
+  .link-underline::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -0.2em;
+    height: 1px;
+    background: currentColor;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 200ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .link-underline:hover::after,
+  .link-underline:focus-visible::after {
+    transform: scaleX(1);
+  }
+
+  .grain {
+    position: fixed;
+    inset: 0;
+    z-index: 90;
+    pointer-events: none;
+    opacity: 0.07;
+    mix-blend-mode: overlay;
+    background-size: 180px 180px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  .marquee {
+    animation: marquee 42s linear infinite;
+  }
+  @keyframes marquee {
+    to {
+      transform: translateX(-50%);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .marquee {
+      animation: none;
+    }
+    .grain {
+      display: none;
+    }
+  }
+}
