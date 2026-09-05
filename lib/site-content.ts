@@ -1,7 +1,7 @@
 export const site = {
   name: 'Cardvertex',
   location: 'Gainesville, FL',
-  email: 'hello@cardvertex.com',
+  email: 'coleducote@cardvertex.com',
   disclaimer:
     'Not affiliated with or endorsed by Google. Google and Google Maps are trademarks of Google LLC.',
 }
