@@ -105,7 +105,7 @@ export const websitePricing = {
     },
     {
       name: 'Professional',
-      price: '$2,500',
+      price: '$3,500',
       tagline: 'Premium quality on a proven structure, built to convert.',
       features: [
         '2 months of upkeep included, then $100/month',
@@ -117,7 +117,7 @@ export const websitePricing = {
     },
     {
       name: 'Premium',
-      price: '$20,000',
+      price: '$10,000',
       tagline: 'Fully custom design and functionality, built around your business.',
       features: [
         '6 months of upkeep included, then $500/month',
@@ -131,7 +131,7 @@ export const websitePricing = {
   custom: {
     name: 'Custom quote',
     body:
-      "Need something between these — or something none of them cover? Tell us what you're after and we'll scope it and price it together.",
+      'Need something none of these cover? Custom builds start at $10,000 and are quoted after a scoping call.',
     cta: 'Request a quote',
   },
   footnote:
