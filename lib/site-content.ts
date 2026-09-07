@@ -97,14 +97,14 @@ export const websitePricing = {
     'Once the reviews are moving, the next thing people check is your website. We build those too.',
   tiers: [
     {
-      name: 'Starter',
+      name: 'More Affordable',
       price: '$500',
       tagline: 'A simple, clean site that gets you online and looking legitimate.',
       features: ['Then $50/month upkeep', 'Support responses within 24 hours'],
       bestFor: 'a shop with no website, or a Facebook page standing in for one',
     },
     {
-      name: 'Professional',
+      name: 'Premium',
       price: '$3,500',
       tagline: 'Premium quality on a proven structure, built to convert.',
       features: [
@@ -116,8 +116,8 @@ export const websitePricing = {
       badge: 'Most popular',
     },
     {
-      name: 'Premium',
-      price: '$10,000',
+      name: 'Ultra Premium',
+      price: "Let's talk.",
       tagline: 'Fully custom design and functionality, built around your business.',
       features: [
         '6 months of upkeep included, then $500/month',
@@ -204,14 +204,9 @@ export const auditForm = {
     'Bakery',
     'Other',
   ],
-  interests: [
-    'Review Engine',
-    'Review Management',
-    'Website — Starter',
-    'Website — Professional',
-    'Website — Premium',
-    'Custom quote',
-  ],
+  interests: ['Review Engine', 'Review Management'],
+  tierLabel: 'Which tier are you looking at?',
+  tiers: ['More Affordable', 'Premium', 'Ultra Premium', 'Not sure yet'],
   submit: 'Send my free audit',
   success: "Got it. You'll hear from us within one business day.",
 }

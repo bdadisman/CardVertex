@@ -6,6 +6,9 @@ import { QuoteButton } from '@/components/quote-button'
 import { Section } from '@/components/section'
 import { websitePricing } from '@/lib/site-content'
 
+const priceClass =
+  'mt-5 block font-display text-[clamp(2.25rem,3.2vw,3rem)] font-bold tracking-tight tabular-nums whitespace-nowrap'
+
 export function WebsitePricing() {
   return (
     <Section id="websites" eyebrow="Pricing — Websites">
@@ -25,10 +28,11 @@ export function WebsitePricing() {
                 </span>
               ) : null}
               <h3 className="font-display text-lg font-semibold tracking-tight">{tier.name}</h3>
-              <CountUp
-                value={tier.price}
-                className="mt-5 font-display text-4xl font-bold tracking-tight tabular-nums md:text-5xl"
-              />
+              {/^\D*\d/.test(tier.price) ? (
+                <CountUp value={tier.price} className={priceClass} />
+              ) : (
+                <span className={priceClass}>{tier.price}</span>
+              )}
               <p className="mt-5 text-sm leading-relaxed text-pretty text-muted-foreground">
                 {tier.tagline}
               </p>

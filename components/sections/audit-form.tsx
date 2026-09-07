@@ -22,12 +22,12 @@ export function AuditForm() {
   const [status, setStatus] = useState<Status>('idle')
   const [errors, setErrors] = useState<FieldErrors>({})
   const [interests, setInterests] = useState<string[]>([])
+  const [tier, setTier] = useState('')
 
   useEffect(() => {
     function onPreselect(e: Event) {
-      const interest = (e as CustomEvent<{ interest: string }>).detail?.interest
-      if (!interest) return
-      setInterests((prev) => (prev.includes(interest) ? prev : [...prev, interest]))
+      const next = (e as CustomEvent<{ tier: string }>).detail?.tier
+      if (next) setTier(next)
     }
     window.addEventListener(PRESELECT_EVENT, onPreselect)
     return () => window.removeEventListener(PRESELECT_EVENT, onPreselect)
@@ -60,10 +60,13 @@ export function AuditForm() {
     }
 
     const notes = String(data.get('notes') ?? '').trim()
-    const notesWithInterests =
-      interests.length > 0
-        ? [`Interested in: ${interests.join(', ')}`, notes].filter(Boolean).join('\n\n')
-        : notes
+    const notesWithInterests = [
+      interests.length > 0 ? `Interested in: ${interests.join(', ')}` : '',
+      tier ? `Website tier: ${tier}` : '',
+      notes,
+    ]
+      .filter(Boolean)
+      .join('\n\n')
 
     setStatus('submitting')
     try {
@@ -209,23 +212,44 @@ export function AuditForm() {
                     </div>
                   </div>
 
-                  <div className="flex flex-col gap-2">
-                    <label htmlFor="businessType" className="text-sm font-medium">
-                      Business type
-                    </label>
-                    <select
-                      id="businessType"
-                      name="businessType"
-                      defaultValue=""
-                      className={fieldClass}
-                    >
-                      <option value="">Select one</option>
-                      {auditForm.businessTypes.map((t) => (
-                        <option key={t} value={t}>
-                          {t}
-                        </option>
-                      ))}
-                    </select>
+                  <div className="grid gap-6 sm:grid-cols-2">
+                    <div className="flex flex-col gap-2">
+                      <label htmlFor="businessType" className="text-sm font-medium">
+                        Business type
+                      </label>
+                      <select
+                        id="businessType"
+                        name="businessType"
+                        defaultValue=""
+                        className={fieldClass}
+                      >
+                        <option value="">Select one</option>
+                        {auditForm.businessTypes.map((t) => (
+                          <option key={t} value={t}>
+                            {t}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                    <div className="flex flex-col gap-2">
+                      <label htmlFor="tier" className="text-sm font-medium">
+                        {auditForm.tierLabel}
+                      </label>
+                      <select
+                        id="tier"
+                        name="tier"
+                        value={tier}
+                        onChange={(e) => setTier(e.target.value)}
+                        className={fieldClass}
+                      >
+                        <option value="">Select one</option>
+                        {auditForm.tiers.map((t) => (
+                          <option key={t} value={t}>
+                            {t}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
                   </div>
 
                   <fieldset className="flex flex-col gap-3">

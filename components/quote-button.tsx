@@ -2,7 +2,7 @@
 
 import { Magnetic } from '@/components/motion/magnetic'
 
-export const PRESELECT_EVENT = 'cardvertex:preselect-interest'
+export const PRESELECT_EVENT = 'cardvertex:preselect-tier'
 
 export function QuoteButton({ children }: { children: React.ReactNode }) {
   return (
@@ -12,7 +12,7 @@ export function QuoteButton({ children }: { children: React.ReactNode }) {
         className="btn-ghost"
         onClick={() => {
           window.dispatchEvent(
-            new CustomEvent(PRESELECT_EVENT, { detail: { interest: 'Custom quote' } }),
+            new CustomEvent(PRESELECT_EVENT, { detail: { tier: 'Not sure yet' } }),
           )
         }}
       >
