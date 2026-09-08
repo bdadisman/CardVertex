@@ -137,9 +137,16 @@ export const websitePricing = {
       price: "Let's talk.",
       tagline: 'Fully custom design and functionality, built around your business.',
       features: [
-        '3 months of upkeep included, then $250/month',
+        'AI chat assistant trained on your services and FAQs',
+        'Everything in Premium, plus:',
+        'Unlimited pages',
+        'Leads pushed straight to your inbox or CRM',
+        'Monthly report on traffic, calls, and form fills',
+        'Ongoing local SEO',
+        'Quarterly strategy call',
+        'Unlimited edits',
+        'Priority build queue',
         'Same-day response, seven days a week',
-        'AI support chatbot on your site, trained on your business',
       ],
       bestFor:
         'multi-location businesses or anyone who wants the site to do real work',
