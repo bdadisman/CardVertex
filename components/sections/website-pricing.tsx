@@ -7,7 +7,7 @@ import { Section } from '@/components/section'
 import { websitePricing } from '@/lib/site-content'
 
 const priceClass =
-  'mt-5 block font-display text-[clamp(2.25rem,3.2vw,3rem)] font-bold tracking-tight tabular-nums whitespace-nowrap'
+  'mt-5 block font-display text-[clamp(2.25rem,3.2vw,3rem)] leading-none font-bold tracking-tight tabular-nums'
 
 export function WebsitePricing() {
   return (

@@ -117,7 +117,7 @@ export const websitePricing = {
     },
     {
       name: 'Ultra Premium',
-      price: "Let's talk.",
+      price: 'From $10,000',
       tagline: 'Fully custom design and functionality, built around your business.',
       features: [
         '6 months of upkeep included, then $500/month',
