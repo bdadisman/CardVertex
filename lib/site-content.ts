@@ -100,7 +100,16 @@ export const websitePricing = {
       name: 'More Affordable',
       price: '$500',
       tagline: 'A simple, clean site that gets you online and looking legitimate.',
-      features: ['Then $50/month upkeep', 'Next business day response'],
+      features: [
+        'Then $50/month upkeep',
+        'Up to 5 pages, mobile-first',
+        'Contact form that emails you directly',
+        'Click-to-call button on mobile',
+        'SSL certificate and hosting included',
+        'Google Business Profile linked and Maps embed',
+        'Up to 30 minutes of edits per month',
+        'Next business day response',
+      ],
       bestFor: 'a shop with no website, or a Facebook page standing in for one',
     },
     {
