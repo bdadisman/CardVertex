@@ -117,7 +117,7 @@ export const websitePricing = {
     },
     {
       name: 'Ultra Premium',
-      price: 'From $10,000',
+      price: "Let's talk.",
       tagline: 'Fully custom design and functionality, built around your business.',
       features: [
         '3 months of upkeep included, then $250/month',
@@ -131,7 +131,7 @@ export const websitePricing = {
   custom: {
     name: 'Custom quote',
     body:
-      'Need something none of these cover? Custom builds start at $10,000 and are quoted after a scoping call.',
+      'Custom builds are quoted after a short conversation about scope. We work at a range of budgets.',
     cta: 'Request a quote',
   },
   responseNote:
