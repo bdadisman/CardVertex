@@ -109,7 +109,7 @@ export const websitePricing = {
       tagline: 'Premium quality on a proven structure, built to convert.',
       features: [
         '2 months of upkeep included, then $100/month',
-        'Support 24/5, Monday–Friday',
+        'Same-day response on business days',
       ],
       bestFor: 'an established shop ready to look like the leader',
       highlighted: true,
@@ -120,8 +120,8 @@ export const websitePricing = {
       price: 'From $10,000',
       tagline: 'Fully custom design and functionality, built around your business.',
       features: [
-        '6 months of upkeep included, then $500/month',
-        '24/7 assistance',
+        '6 months of upkeep included, then $250/month',
+        'Same-day response, seven days a week',
         'AI support chatbot on your site, trained on your business',
       ],
       bestFor:
