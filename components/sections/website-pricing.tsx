@@ -65,7 +65,8 @@ export function WebsitePricing() {
         </StaggerItem>
       </Stagger>
 
-      <FadeUp className="mt-10">
+      <FadeUp className="mt-10 flex flex-col gap-3">
+        <p className="text-sm text-muted-foreground">{websitePricing.responseNote}</p>
         <p className="text-sm text-muted-foreground">{websitePricing.footnote}</p>
       </FadeUp>
     </Section>

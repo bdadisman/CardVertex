@@ -100,7 +100,7 @@ export const websitePricing = {
       name: 'More Affordable',
       price: '$500',
       tagline: 'A simple, clean site that gets you online and looking legitimate.',
-      features: ['Then $50/month upkeep', 'Support responses within 24 hours'],
+      features: ['Then $50/month upkeep', 'Next business day response'],
       bestFor: 'a shop with no website, or a Facebook page standing in for one',
     },
     {
@@ -134,6 +134,8 @@ export const websitePricing = {
       'Need something none of these cover? Custom builds start at $10,000 and are quoted after a scoping call.',
     cta: 'Request a quote',
   },
+  responseNote:
+    'Response means we acknowledge your request and give you a timeline. Requests received after 5pm ET are answered the next morning.',
   footnote:
     'Website upkeep is billed separately from Review Management. Cancel either one independently.',
 }
