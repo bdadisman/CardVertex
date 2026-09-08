@@ -120,7 +120,7 @@ export const websitePricing = {
       price: 'From $10,000',
       tagline: 'Fully custom design and functionality, built around your business.',
       features: [
-        '6 months of upkeep included, then $250/month',
+        '3 months of upkeep included, then $250/month',
         'Same-day response, seven days a week',
         'AI support chatbot on your site, trained on your business',
       ],
